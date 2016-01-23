@@ -1,27 +1,32 @@
 (function() {
   "use strict";
-  angular.module("internationalPhoneNumber", []).constant('ipnConfig', {
-    allowExtensions: false,
-    autoFormat: true,
-    autoHideDialCode: true,
-    autoPlaceholder: true,
-    customPlaceholder: null,
-    defaultCountry: "",
-    geoIpLookup: null,
-    nationalMode: true,
-    numberType: "MOBILE",
-    onlyCountries: void 0,
-    preferredCountries: ['us', 'gb'],
-    skipUtilScriptDownload: false,
-    utilsScript: ""
-  }).directive('internationalPhoneNumber', [
-    '$timeout', 'ipnConfig', function($timeout, ipnConfig) {
+  var _app = angular.module("internationalPhoneNumber", [])
+    .constant('ipnConfig', {
+      allowExtensions: false,
+      autoFormat: true,
+      autoHideDialCode: true,
+      autoPlaceholder: true,
+      customPlaceholder: null,
+      defaultCountry: "",
+      geoIpLookup: null,
+      nationalMode: true,
+      numberType: "MOBILE",
+      onlyCountries: void 0,
+      preferredCountries: ['us', 'gb'],
+      skipUtilScriptDownload: false,
+      utilsScript: ""
+    })
+
+  _app.directive('internationalPhoneNumber', [
+    '$timeout', 'ipnConfig',
+    function($timeout, ipnConfig) {
       return {
         restrict: 'A',
         require: '^ngModel',
         scope: {
           ngModel: '=',
-          country: '='
+          country: '=',
+          getNumber: '='
         },
         link: function(scope, element, attrs, ctrl) {
           var handleWhatsSupposedToBeAnArray, options, read, watchOnce;
@@ -39,7 +44,8 @@
           handleWhatsSupposedToBeAnArray = function(value) {
             if (value instanceof Array) {
               return value;
-            } else {
+            }
+            else {
               return value.toString().replace(/[ ]/g, '').split(',');
             }
           };
@@ -52,11 +58,14 @@
             option = attrs[key];
             if (key === 'preferredCountries') {
               return options.preferredCountries = handleWhatsSupposedToBeAnArray(option);
-            } else if (key === 'onlyCountries') {
+            }
+            else if (key === 'onlyCountries') {
               return options.onlyCountries = handleWhatsSupposedToBeAnArray(option);
-            } else if (typeof value === "boolean") {
+            }
+            else if (typeof value === "boolean") {
               return options[key] = option === "true";
-            } else {
+            }
+            else {
               return options[key] = option;
             }
           });
@@ -78,6 +87,13 @@
           scope.$watch('country', function(newValue) {
             if (newValue !== null && newValue !== void 0 && newValue !== '') {
               return element.intlTelInput("selectCountry", newValue);
+            }
+          });
+          scope.$watch('ngModel', function(newValue) {
+            if (newValue !== null && newValue !== void 0 && newValue !== '') {
+              //return element.intlTelInput("selectCountry", newValue);
+              scope.getNumber = element.intlTelInput("getNumber")
+
             }
           });
           ctrl.$formatters.push(function(value) {
