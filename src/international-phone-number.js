@@ -1,21 +1,21 @@
 (function() {
   "use strict";
   var _app = angular.module("internationalPhoneNumber", [])
-    .constant('ipnConfig', {
-      allowExtensions: false,
-      autoFormat: true,
-      autoHideDialCode: true,
-      autoPlaceholder: true,
-      customPlaceholder: null,
-      defaultCountry: "",
-      geoIpLookup: null,
-      nationalMode: true,
-      numberType: "MOBILE",
-      onlyCountries: void 0,
-      preferredCountries: ['us', 'gb'],
-      skipUtilScriptDownload: false,
-      utilsScript: ""
-    })
+      .constant('ipnConfig', {
+        allowExtensions: false,
+        autoFormat: true,
+        autoHideDialCode: true,
+        autoPlaceholder: true,
+        customPlaceholder: null,
+        defaultCountry: "",
+        geoIpLookup: null,
+        nationalMode: true,
+        numberType: "MOBILE",
+        onlyCountries: void 0,
+        preferredCountries: ['us', 'gb'],
+        skipUtilScriptDownload: false,
+        utilsScript: ""
+      })
 
   _app.directive('internationalPhoneNumber', [
     '$timeout', 'ipnConfig',
@@ -93,6 +93,8 @@
             if (newValue !== null && newValue !== void 0 && newValue !== '') {
               //return element.intlTelInput("selectCountry", newValue);
               scope.getNumber = element.intlTelInput("getNumber")
+              scope.country = element.intlTelInput("getSelectedCountryData")
+              //scope.$apply();
 
             }
           });
